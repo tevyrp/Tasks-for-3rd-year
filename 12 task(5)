@@ -1,0 +1,135 @@
+public interface MenuComponent {
+    void add(MenuComponent component);
+    void remove(MenuComponent component);
+    void display();
+}
+
+
+
+
+public class Dish implements MenuComponent {
+    private String name;
+    private double price;
+
+    public Dish(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    @Override
+    public void add(MenuComponent component) {
+        // Do nothing - cannot add child components to a dish
+    }
+
+    @Override
+    public void remove(MenuComponent component) {
+        // Do nothing - cannot remove child components from a dish
+    }
+
+    @Override
+    public void display() {
+        System.out.println(name + " - $" + price);
+    }
+}
+
+
+
+
+
+
+public class Category implements MenuComponent {
+    private String name;
+    private List<MenuComponent> components = new ArrayList<>();
+
+    public Category(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void add(MenuComponent component) {
+        components.add(component);
+    }
+
+    @Override
+    public void remove(MenuComponent component) {
+        components.remove(component);
+    }
+
+    @Override
+    public void display() {
+        System.out.println(name);
+        for (MenuComponent component : components) {
+            component.display();
+        }
+    }
+}
+
+
+
+
+
+
+
+public class Menu implements MenuComponent {
+    private List<MenuComponent> components = new ArrayList<>();
+
+    @Override
+    public void add(MenuComponent component) {
+        components.add(component);
+    }
+
+    @Override
+    public void remove(MenuComponent component) {
+        components.remove(component);
+    }
+
+    @Override
+    public void display() {
+        for (MenuComponent component : components) {
+            component.display();
+        }
+    }
+}
+
+
+
+
+
+
+public class MenuGenerator {
+    private MenuComponent menuComponent;
+
+    public MenuGenerator(MenuComponent menuComponent) {
+        this.menuComponent = menuComponent;
+    }
+
+    public void generateMenu() {
+        Category appetizers = new Category("Appetizers");
+        appetizers.add(new Dish("Bruschetta", 8.99));
+        appetizers.add(new Dish("Calamari", 12.99));
+        appetizers.add(new Dish("Caprese Salad", 9.99));
+
+        Category entrees = new Category("Entrees");
+        entrees.add(new Dish("Spaghetti Bolognese", 15.99));
+        entrees.add(new Dish("Chicken Parmesan", 18.99));
+        entrees.add(new Dish("Grilled Salmon", 22.99));
+
+        Category desserts = new Category("Desserts");
+        desserts.add(new Dish("Tiramisu", 7.99));
+        desserts.add(new Dish("Cannoli", 6.99));
+        desserts.add(new Dish("Gelato", 5.99));
+
+        menuComponent.add(appetizers);
+        menuComponent.add(entrees);
+        menuComponent.add(desserts);
+    }
+}
+
+
+
+
+//пример
+Menu menu = new Menu();
+MenuGenerator menuGenerator = new MenuGenerator(menu);
+menuGenerator.generateMenu();
+menu.display();
