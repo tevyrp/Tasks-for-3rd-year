@@ -1,0 +1,84 @@
+public class Drawing {
+    private List<Shape> shapes = new ArrayList<>();
+
+    public void addShape(Shape shape) {
+        shapes.add(shape);
+    }
+
+    public void removeShape(Shape shape) {
+        shapes.remove(shape);
+    }
+
+    public void draw() {
+        for (Shape shape : shapes) {
+            shape.draw();
+        }
+    }
+
+    public DrawingMemento save() {
+        List<Shape> shapesCopy = new ArrayList<>(shapes);
+        return new DrawingMemento(shapesCopy);
+    }
+
+    public void restore(DrawingMemento memento) {
+        shapes = memento.getShapes();
+    }
+}
+
+
+
+
+
+
+public interface Shape {
+    void draw();
+    ShapeMemento save();
+    void restore(ShapeMemento memento);
+}
+
+
+
+//пример реализации классов DrawingMemento и DrawingCaretaker
+public class DrawingMemento {
+    private List<Shape> shapes;
+
+    public DrawingMemento(List<Shape> shapes) {
+        this.shapes = shapes;
+    }
+
+    public List<Shape> getShapes() {
+        return shapes;
+    }
+}
+
+
+
+
+
+public class DrawingCaretaker {
+    private List<DrawingMemento> mementos = new ArrayList<>();
+
+    public void addMemento(DrawingMemento memento) {
+        mementos.add(memento);
+    }
+
+    public DrawingMemento getMemento(int index) {
+        return mementos.get(index);
+    }
+}
+
+
+
+
+//пример
+Drawing drawing = new Drawing();
+drawing.addShape(new Circle());
+drawing.addShape(new Square());
+DrawingCaretaker caretaker = new DrawingCaretaker();
+caretaker.addMemento(drawing.save());
+drawing.removeShape(new Circle());
+caretaker.addMemento(drawing.save());
+drawing.draw();
+caretaker.getMemento(0);
+drawing.restore(memento);
+drawing.draw();
