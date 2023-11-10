@@ -1,0 +1,80 @@
+public interface Printable {
+    void print(String document);
+}
+
+
+
+
+
+public interface Scanner {
+    void scan(String document);
+}
+
+
+
+//пример реализации классов PrinterAdapter и ScannerAdapter
+public class PrinterAdapter implements Printable {
+    private Printer printer;
+
+    public PrinterAdapter(Printer printer) {
+        this.printer = printer;
+    }
+
+    @Override
+    public void print(String document) {
+        printer.printDocument(document);
+    }
+}
+
+
+
+
+
+
+public class ScannerAdapter implements Scanner {
+    private Scanner scanner;
+
+    public ScannerAdapter(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    @Override
+    public void scan(String document) {
+        scanner.scanDocument(document);
+    }
+}
+
+
+
+
+//пример реализации класса PrintScannerAdapter
+public class PrintScannerAdapter implements Printable, Scanner {
+    private Printable printer;
+    private Scanner scanner;
+
+    public PrintScannerAdapter(Printable printer, Scanner scanner) {
+        this.printer = printer;
+        this.scanner = scanner;
+    }
+
+    @Override
+    public void print(String document) {
+        printer.print(document);
+    }
+
+    @Override
+    public void scan(String document) {
+        scanner.scan(document);
+    }
+}
+
+
+
+//пример
+Printer printer = new HPPrinter();
+Scanner scanner = new EpsonScanner();
+Printable printerAdapter = new PrinterAdapter(printer);
+Scanner scannerAdapter = new ScannerAdapter(scanner);
+PrintScannerAdapter printScannerAdapter = new PrintScannerAdapter(printerAdapter, scannerAdapter);
+printScannerAdapter.print("Hello, world!");
+printScannerAdapter.scan("Document");
