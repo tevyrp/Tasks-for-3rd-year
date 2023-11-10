@@ -1,0 +1,63 @@
+public interface Product {
+    String getName();
+    void setName(String name);
+    String getDescription();
+    void setDescription(String description);
+    double getPrice();
+    void setPrice(double price);
+}
+
+
+
+
+
+public interface Store {
+    String getName();
+    void setName(String name);
+    String getUrl();
+    void setUrl(String url);
+    String getLocation();
+    void setLocation(String location);
+}
+
+
+
+
+//пример реализации интерфейса PriceTracker
+public interface PriceTracker {
+    void trackPrice(Product product, Store store);
+}
+
+
+
+//пример реализации класса PriceChangeNotifier
+public class PriceChangeNotifier implements Observer {
+    private User user;
+    private PriceTracker priceTracker;
+
+    public PriceChangeNotifier(User user, PriceTracker priceTracker) {
+        this.user = user;
+        this.priceTracker = priceTracker;
+    }
+
+    public void subscribe(Product product, Store store) {
+        priceTracker.trackPrice(product, store);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Product product = (Product) arg;
+        String message = "The price of " + product.getName() + " has changed to " + product.getPrice();
+        user.notify(message);
+    }
+}
+
+
+
+//пример
+Product product = new ElectronicsProduct("iPhone 13", "The latest iPhone from Apple", 999.99);
+Store store = new AmazonStore("Amazon", "https://www.amazon.com", "USA");
+PriceTracker priceTracker = new AmazonPriceTracker();
+User user = new User("John", "john@example.com");
+PriceChangeNotifier notifier = new PriceChangeNotifier(user, priceTracker);
+notifier.subscribe(product, store);
