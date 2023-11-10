@@ -1,0 +1,77 @@
+public abstract class Shape {
+    protected int x;
+    protected int y;
+    protected int size;
+    protected String color;
+
+    public Shape(int x, int y, int size, String color) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+    }
+
+    public abstract void draw(Renderer renderer);
+}
+
+
+
+
+public class Circle extends Shape {
+    public Circle(int x, int y, int size, String color) {
+        super(x, y, size, color);
+    }
+
+    @Override
+    public void draw(Renderer renderer) {
+        renderer.renderCircle(x, y, size, color);
+    }
+}
+
+
+
+
+public class Square extends Shape {
+    public Square(int x, int y, int size, String color) {
+        super(x, y, size, color);
+    }
+
+    @Override
+    public void draw(Renderer renderer) {
+        renderer.renderSquare(x, y, size, color);
+    }
+}
+
+
+
+
+public interface Renderer {
+    void renderCircle(int x, int y, int size, String color);
+    void renderSquare(int x, int y, int size, String color);
+    void renderTriangle(int x1, int y1, int x2, int y2, int x3, int y3, String color);
+}
+
+
+
+
+//пример реализации класса ShapeRenderer
+public class ShapeRenderer {
+    private Shape shape;
+    private Renderer renderer;
+
+    public ShapeRenderer(Shape shape, Renderer renderer) {
+        this.shape = shape;
+        this.renderer = renderer;
+    }
+
+    public void render() {
+        shape.draw(renderer);
+    }
+}
+
+
+//Например
+Shape circle = new Circle(100, 100, 50, "red");
+Renderer monitorRenderer = new MonitorRenderer();
+ShapeRenderer shapeRenderer = new ShapeRenderer(circle, monitorRenderer);
+shapeRenderer.render();
