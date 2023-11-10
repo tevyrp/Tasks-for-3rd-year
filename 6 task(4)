@@ -1,0 +1,53 @@
+public abstract class OrderProcessor {
+    public final void processOrder(Order order) {
+        confirmOrder(order);
+        packageItems(order);
+        deliverPackage(order);
+    }
+
+    protected abstract void confirmOrder(Order order);
+
+    protected abstract void packageItems(Order order);
+
+    protected abstract void deliverPackage(Order order);
+}
+
+
+
+
+
+
+public interface Order {
+    String getCustomerName();
+    void setCustomerName(String customerName);
+    String getShippingAddress();
+    void setShippingAddress(String shippingAddress);
+    List<String> getOrderItems();
+    void setOrderItems(List<String> orderItems);
+}
+
+
+
+//пример реализации класса OrderProcessorRunner
+public class OrderProcessorRunner {
+    private Order order;
+    private OrderProcessor orderProcessor;
+
+    public OrderProcessorRunner(Order order, OrderProcessor orderProcessor) {
+        this.order = order;
+        this.orderProcessor = orderProcessor;
+    }
+
+    public void run() {
+        orderProcessor.processOrder(order);
+    }
+}
+
+
+
+//пример
+Order order = new ElectronicsOrder("John Doe", "123 Main St, Anytown USA", Arrays.asList("iPhone 13", "MacBook Pro"));
+OrderProcessor orderProcessor = new ElectronicsOrderProcessor();
+OrderProcessorRunner runner = new OrderProcessorRunner(order, orderProcessor);
+runner.run();
+
