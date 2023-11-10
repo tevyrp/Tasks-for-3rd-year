@@ -1,0 +1,82 @@
+public abstract class ColorModel {
+    protected String colorSpace;
+    protected int[] colorComponents;
+    protected int alpha;
+
+    public ColorModel(String colorSpace, int[] colorComponents, int alpha) {
+        this.colorSpace = colorSpace;
+        this.colorComponents = colorComponents;
+        this.alpha = alpha;
+    }
+
+    public abstract void render(ColorRenderer renderer);
+}
+
+
+
+
+
+
+public class RGBColorModel extends ColorModel {
+    public RGBColorModel(int[] colorComponents, int alpha) {
+        super("RGB", colorComponents, alpha);
+    }
+
+    @Override
+    public void render(ColorRenderer renderer) {
+        renderer.renderRGB(colorComponents, alpha);
+    }
+}
+
+
+
+
+
+
+public class CMYKColorModel extends ColorModel {
+    public CMYKColorModel(int[] colorComponents, int alpha) {
+        super("CMYK", colorComponents, alpha);
+    }
+
+    @Override
+    public void render(ColorRenderer renderer) {
+        renderer.renderCMYK(colorComponents, alpha);
+    }
+}
+
+
+
+
+
+
+public interface ColorRenderer {
+    void renderRGB(int[] colorComponents, int alpha);
+    void renderCMYK(int[] colorComponents, int alpha);
+    void renderHSV(int[] colorComponents, int alpha);
+}
+
+
+
+//пример реализации класса ColorModelRenderer
+public class ColorModelRenderer {
+    private ColorModel colorModel;
+    private ColorRenderer colorRenderer;
+
+    public ColorModelRenderer(ColorModel colorModel, ColorRenderer colorRenderer) {
+        this.colorModel = colorModel;
+        this.colorRenderer = colorRenderer;
+    }
+
+    public void render() {
+        colorModel.render(colorRenderer);
+    }
+}
+
+
+
+
+//пример
+ColorModel rgbColor = new RGBColorModel(new int[]{255, 0, 0}, 255);
+ColorRenderer monitorColorRenderer = new MonitorColorRenderer();
+ColorModelRenderer colorModelRenderer = new ColorModelRenderer(rgbColor, monitorColorRenderer);
+colorModelRenderer.render();
