@@ -1,0 +1,55 @@
+public abstract class MapPrototype implements Cloneable {
+    public abstract void draw();
+
+    @Override
+    public MapPrototype clone() throws CloneNotSupportedException {
+        return (MapPrototype) super.clone();
+    }
+}
+
+
+
+
+
+public class ForestMapPrototype extends MapPrototype {
+    private String terrain = "forest";
+
+    @Override
+    public void draw() {
+        System.out.println("Drawing " + terrain + " map");
+    }
+}
+
+
+
+
+
+
+public class MapGenerator {
+    private MapPrototype mapPrototype;
+
+    public MapGenerator(MapPrototype mapPrototype) {
+        this.mapPrototype = mapPrototype;
+    }
+
+    public MapPrototype generateMap() {
+        try {
+            MapPrototype map = mapPrototype.clone();
+            // Modify the map to create a new random map
+            // ...
+            return map;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+
+
+
+//пример
+MapPrototype forestMapPrototype = new ForestMapPrototype();
+MapGenerator mapGenerator = new MapGenerator(forestMapPrototype);
+MapPrototype randomMap = mapGenerator.generateMap();
+randomMap.draw();
