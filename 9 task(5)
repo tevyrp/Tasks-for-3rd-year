@@ -1,0 +1,49 @@
+public class DataCache {
+    private Map<String, Object> cache = new HashMap<>();
+
+    public void addData(String key, Object data) {
+        cache.put(key, data);
+    }
+
+    public Object getData(String key) {
+        return cache.get(key);
+    }
+}
+
+
+
+
+public interface DataFetcher {
+    List<Object> fetchData();
+}
+
+
+
+//пример реализации класса CachedDataFetcher
+public class CachedDataFetcher implements DataFetcher {
+    private DataFetcher dataFetcher;
+    private DataCache dataCache;
+
+    public CachedDataFetcher(DataFetcher dataFetcher, DataCache dataCache) {
+        this.dataFetcher = dataFetcher;
+        this.dataCache = dataCache;
+    }
+
+    @Override
+    public List<Object> fetchData() {
+        List<Object> data = (List<Object>) dataCache.getData(dataFetcher.getClass().getSimpleName());
+        if (data == null) {
+            data = dataFetcher.fetchData();
+            dataCache.addData(dataFetcher.getClass().getSimpleName(), data);
+        }
+        return data;
+    }
+}
+
+
+
+//пример
+DataCache dataCache = new DataCache();
+DataFetcher userDataFetcher = new UserDataFetcher();
+DataFetcher cachedUserDataFetcher = new CachedDataFetcher(userDataFetcher, dataCache);
+List<Object> userData = cachedUserDataFetcher.fetchData();
