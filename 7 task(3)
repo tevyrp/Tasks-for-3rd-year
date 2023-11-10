@@ -1,0 +1,74 @@
+public class Car {
+    private String make;
+    private String model;
+    private String color;
+    private List<String> options;
+
+    public Car(String make, String model, String color, List<String> options) {
+        this.make = make;
+        this.model = model;
+        this.color = color;
+        this.options = options;
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+}
+
+
+
+
+
+public class CarBuilder {
+    private String make;
+    private String model;
+    private String color;
+    private List<String> options;
+
+    public CarBuilder setMake(String make) {
+        this.make = make;
+        return this;
+    }
+
+    public CarBuilder setModel(String model) {
+        this.model = model;
+        return this;
+    }
+
+    public CarBuilder setColor(String color) {
+        this.color = color;
+        return this;
+    }
+
+    public CarBuilder setOptions(List<String> options) {
+        this.options = options;
+        return this;
+    }
+
+    public Car build() {
+        return new Car(make, model, color, options);
+    }
+}
+
+
+
+//пример
+Car car = new CarBuilder()
+                .setMake("Toyota")
+                .setModel("Camry")
+                .setColor("Blue")
+                .setOptions(Arrays.asList("Navigation", "Sunroof"))
+                .build();
